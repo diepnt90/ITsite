@@ -1,0 +1,45 @@
+<p>I encountered GPO Error message &ldquo;<strong>The system cannot find the file path specified.&rdquo;</strong>when editing Group Policy for Default Domain Policy or Default Domain Controller Policy.</p>
+<p>Upon investigation, the GPO policy folder in SYSVOL is also missing.</p>
+<h2><strong>Issues</strong></h2>
+<p>Editing GPO Policy failed with error message&nbsp;<strong>The system cannot find the path specified</strong></p>
+<p style="text-align: center;"><strong><img src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_01-720x284.png" alt="" width="720" height="284" /></strong></p>
+<p style="text-align: center;"><strong><img src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_02.png" alt="" width="425" height="259" /></strong></p>
+<p style="text-align: center;"><strong><img src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_05.png" alt="" width="667" height="277" /></strong></p>
+<h2><strong>Investigations</strong></h2>
+<p>GPO Policy is stored in&nbsp;<strong>%SYSVOL%\domain\Policies{GPO_GUID}&nbsp;</strong>&nbsp;folder and if the GPO GUID folder including subfolder (<strong>User</strong>&nbsp;and&nbsp;<strong>Machine</strong>) is missing, GPO will raise this error.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_04.png" alt="" width="611" height="280" /></p>
+<h2><strong>Solution 1:</strong></h2>
+<p>There are two ways:</p>
+<ol>
+<li>If you have multi Domain Controller, you can restore the content from another DC</li>
+<li>Restore from backup</li>
+</ol>
+<h2>&nbsp;</h2>
+<h2><strong>Solution 2:</strong></h2>
+<p>Rebuild the missing GPO Policy folder structure</p>
+<p>&nbsp;</p>
+<h3><strong>Steps:</strong></h3>
+<p>2-1. Open&nbsp;<strong>Active Directory Users and Computers</strong></p>
+<p>2-2. Add&nbsp;<strong>Display Name&nbsp;</strong>in view column</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_07.png" alt="" width="480" height="267" /></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_08.png" alt="" width="533" height="315" /></p>
+<p>2-3. Enable&nbsp;<strong>Advanced Features</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_06.png" alt="" width="526" height="268" /></strong></p>
+<p><strong>2-3. Navigate to&nbsp;[Domain]\System\Policies</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_03-1024x473.png" alt="" width="799" height="369" /></strong></p>
+<p><strong>2-4. Right Click on affected GPO policy to copy&nbsp;GUID&nbsp;including curly bracket</strong></p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_09.png" alt="" width="410" height="460" /></p>
+<p>2-5. Navigate to your Domain SYSVOL folder (<strong>%SYSVOL%\domain\Policies</strong>)</p>
+<p>2-6. Create&nbsp;<strong>New Folder&nbsp;</strong>for GPO Policy:</p>
+<ul>
+<li>Create&nbsp;<strong>New GPO Policy</strong>&nbsp;<strong>Folder</strong>&nbsp;and rename it with&nbsp;<strong>GPO GUID</strong></li>
+<li>Create&nbsp;<strong>two new subfolder</strong>&nbsp;(<strong>Machine</strong>&nbsp;and&nbsp;<strong>User</strong>) under&nbsp;<strong>GPO GUID folder</strong></li>
+<li><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_10.png" alt="" width="344" height="401" /></strong></li>
+</ul>
+<p><strong>2-7. Edit GPO Policy from&nbsp;Group Policy&nbsp;Management&nbsp;Console</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="http://blog.ylnotes.com/wp-content/uploads/2016/07/GPO_FileNotFound_11.png" alt="" width="628" height="267" /></strong></p>
+<h2><strong>References:</strong></h2>
+<ol>
+<li><a href="https://support.microsoft.com/en-us/kb/253268">MS KB253268: Group Policy Error Message When Appropriate Sysvol Contents Are Missing</a></li>
+</ol>
+<p>&nbsp;</p>

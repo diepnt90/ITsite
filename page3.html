@@ -1,0 +1,11 @@
+<p>If you get this error when join in domain, it means that the name of this PC you join was used before.</p>
+<p><a href="https://support.microsoft.com/en-us/help/3070083/duplicate-spn-check-on-windows-server-2012-r2-based-domain-controller ">https://support.microsoft.com/en-us/help/3070083/duplicate-spn-check-on-windows-server-2012-r2-based-domain-controller </a></p>
+<p>Change dSHeuristic</p>
+<p>Quick Steps &ndash; Using ADSI Edit</p>
+<p>In the left pane of ADSIEdit, right-click ADSI Edit and select Connect to from the menu.</p>
+<p>Select Configuration from the Select a well-known Naming Context menu and click OK.</p>
+<p>In the left pane, expand Configuration, CN=Services, CN=Windows NT. In the right pane, right-click CN=Directory Service, and select Properties from the menu.</p>
+<p>In the CN=Directory Service Properties dialog box, select dSHeuristics on the Attribute Editor tab and click Edit.</p>
+<p>In the String Attribute Editor dialog box, type 000000000100000000022 to disable NETBIOS based SPN uniqueness check, and click OK.</p>
+<p>Click OK in the CN=Directory Service Properties dialog box and close ADSI Edit.</p>
+<p><a href="https://blogs.technet.microsoft.com/askpfeplat/2015/07/27/third-party-active-directory-migration-tools-and-kb-3070083/">https://blogs.technet.microsoft.com/askpfeplat/2015/07/27/third-party-active-directory-migration-tools-and-kb-3070083/</a></p>

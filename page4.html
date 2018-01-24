@@ -1,0 +1,43 @@
+<p>This is a short guide to configuring backups of Oracle 12 using Veritas Backup Exec 16.</p>
+<p><strong>1. Establish trust with Oracle Database server within Backup Exec console and ensure agent is installed.</strong></p>
+<p><strong>2.Create a login to the database for backup purposes in Oracle</strong></p>
+<p style="font-weight: 400;">Open up a command prompt and run the following command &ndash;</p>
+<p style="font-weight: 400;">Sqlplus&nbsp;/nolog</p>
+<p style="font-weight: 400;"><em>Log in with your database admin account as&nbsp;sysdba</em></p>
+<p style="font-weight: 400;">Connect&nbsp;myusername/mypassword@databasename&nbsp;as&nbsp;sysdba</p>
+<p style="font-weight: 400;">CREATE USER BACKUP IDENTIFIED BY MYPASSWORD;</p>
+<p style="font-weight: 400;">GRANT UNLIMITED TABLESPACE TO BACKUP;</p>
+<p style="font-weight: 400;">GRANT AQ_ADMINISTRATOR_ROLE TO BACKUP;</p>
+<p style="font-weight: 400;">GRANT DBA TO BACKUP;</p>
+<p style="font-weight: 400;">GRANT CONNECT TO BACKUP;</p>
+<p style="font-weight: 400;">ALTER USER BACKUP DEFAULT ROLE ALL;</p>
+<p style="font-weight: 400;">ALTER USER BACKUP DEFAULT TABLESPACE SYSTEM;</p>
+<p style="font-weight: 400;">&nbsp;<strong>3.Within the Local Users and Groups section of Computer Management on the Oracle database server, add the backup servers windows domain administrator account to the following groups</strong></p>
+<ol>
+<li style="font-weight: 400;">ORA_OraDB12Home1_SYSBACKUP</li>
+<li style="font-weight: 400; text-align: left;">ORA_DBA&nbsp;&nbsp;<em>Not sure if this is strictly necessary</em><em><img src="https://1.bp.blogspot.com/-v3DMaVL12mE/WEtI8dEuq8I/AAAAAAAAF6A/AOaFaRc_9a87wFL3F7uBhtSEc_OB7FR9gCLcB/s320/1.png" alt="" width="320" height="119" /></em></li>
+</ol>
+<p><em><strong>4.Open the Veritas Backup Exec Agent Utilit</strong></em></p>
+<p>a.Under the Oracle tab, ensure you add the following;</p>
+<ol>
+<li style="font-weight: 400;">Instance name</li>
+<li style="font-weight: 400;">Local oracle user created in step 2</li>
+<li style="font-weight: 400;">Hostname of Backup Server</li>
+</ol>
+<p style="text-align: center;"><img src="https://2.bp.blogspot.com/-kQvqw8WHYeY/WEtJPm4JPdI/AAAAAAAAF6I/5yEaRtzol-8Kt6F_LIJxj96m43Xqgh-xACLcB/s400/2.png" alt="" width="400" height="267" /></p>
+<p style="text-align: left;">b. Under the Database Access Tab, type in the windows domain administrator account which was added in step 3 to the local security groups.</p>
+<p style="text-align: center;"><img src="https://1.bp.blogspot.com/-ZkeiNILj0O4/WEtJVVcfRoI/AAAAAAAAF6M/_JRknKIlQDYVeWwIRIZV7peh0zULXq42wCLcB/s400/3.png" alt="" width="400" height="269" /></p>
+<p style="text-align: left;"><strong>&nbsp;</strong><strong>5. Adding the Oracle Server Name</strong></p>
+<p style="text-align: left;"><strong>a. Within Backup Exec, go into the setting section labelled &lsquo;Backup Exec Settings&rsquo;.</strong></p>
+<p style="text-align: center;"><strong><img src="https://3.bp.blogspot.com/-amlZ1458X9c/WEtJc-pJqoI/AAAAAAAAF6Q/Y6n_koBW8boELHXqYjs_w7SZb6X6xthgQCLcB/s320/4.png" alt="" width="320" height="112" /></strong></p>
+<p style="text-align: left;"><strong>b. Within the Oracle Section, add in the server name and use the windows domain administrator credentials supplied in step 4b.</strong></p>
+<p style="text-align: left;"><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="https://4.bp.blogspot.com/-wrdaigjFn1Y/WEtJhXigi5I/AAAAAAAAF6U/ToorOUf0igw_wveN6MlOninC3cfbGuJaACLcB/s320/5.png" alt="" width="320" height="254" />6.Add the Credentials of the Oracle Backup User (which was added in step 2) to the credentials section within Backup Exec&nbsp;</strong></p>
+<p style="text-align: left;"><strong><img style="display: block; margin-left: auto; margin-right: auto;" src="https://2.bp.blogspot.com/-Jg8abhb5PYg/WEtJohhGe3I/AAAAAAAAF6c/oYMCRQkj_0MZpa4yO2DZV2YDInb61UgYQCEw/s320/7.png" alt="" width="320" height="214" /></strong></p>
+<p style="font-weight: 400;"><strong>7.Create a new backup job.</strong></p>
+<p style="font-weight: 400;">In the credentials selection, expand the Oracle icon to show a list of the actual databases. Ensure that the logon account used is the account created in Step 6.</p>
+<p style="font-weight: 400;"><img style="display: block; margin-left: auto; margin-right: auto;" src="https://1.bp.blogspot.com/-jukMBquH__8/WEtJqZJItxI/AAAAAAAAF6g/yfD9sbj1V4IdQn0YirKJPHpyYa3UJ1Y_QCEw/s320/8.png" alt="" width="320" height="129" /></p>
+<p style="font-weight: 400;">Proceed to configuring the remainder of the backup.</p>
+<p style="font-weight: 400;">Hope it works for you.</p>
+<p style="font-weight: 400;">References;</p>
+<p style="font-weight: 400;"><a href="https://www.veritas.com/support/en_US/article.000038273">https://www.veritas.com/support/en_US/article.000038273</a></p>
+<p style="text-align: left;">&nbsp;</p>
