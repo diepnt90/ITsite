@@ -1,0 +1,15 @@
+This solution works for Windows 2008/2012/2016 also 
+
+After you restore active director, domain controller successfully, you cannot open user and group ( dsa.msc) and the below picture shows up.
+
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://lh3.googleusercontent.com/proxy/X0wxNBAcfuvMwdwba0rylfMcaegDqb4sCZRxtITXJ1BMjyR4KOlhkMI-8FYeA96ZwBzNN-DZxP0dPpe9m3TKB8V0gwUUq9wlwrUlKBjM0Q0=s0-d" alt="" width="468" height="204" /></p>
+"Naming information cannot be located because: The specified domain either does not exits or could not be contacted"
+So you can easily fix that by doing following tasks.
+
+1. Point DNS to AD itself.
+2. Go to Registry editor and open the key SysvolReady at HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters
+
+
+The value of the key is 0 change it to 1. If the value is 1 change it to 0 and ‘Accept’, again change to 1 and accept. Exit registry editor.
+
+Great !!! Worked like a charm.
