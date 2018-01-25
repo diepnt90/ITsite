@@ -1,0 +1,68 @@
+<p id="b60c" class="graf graf--p graf-after--h3">In this article we will look at setting up the basis for Continuous Integration using Jenkins for orchestration and Github for source control. We will be configuring a Jenkins build to be initiated on a push to a repository.</p>
+<h4 id="2a3c" class="graf graf--h4 graf-after--p">1. Install Github Integration Plugin</h4>
+<p id="d697" class="graf graf--p graf-after--h4">First we need to install the&nbsp;<a class="markup--anchor markup--p-anchor" href="https://wiki.jenkins-ci.org/display/JENKINS/GitHub+Integration+Plugin" target="_blank" rel="nofollow noopener" data-href="https://wiki.jenkins-ci.org/display/JENKINS/GitHub+Integration+Plugin">GitHub Integration Plugin</a>, this will give us the ability to configure Jenkins to use our Github repository.</p>
+<figure id="e570" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*BBrLOQcf79V7MU3mqzONjw.png" data-width="2874" data-height="770" data-action="zoom" data-action-value="1*BBrLOQcf79V7MU3mqzONjw.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="20"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*BBrLOQcf79V7MU3mqzONjw.png" data-src="https://cdn-images-1.medium.com/max/800/1*BBrLOQcf79V7MU3mqzONjw.png" /></div>
+</div>
+<figcaption class="imageCaption">Installing Github integration plugin</figcaption>
+</figure>
+<h4 id="4250" class="graf graf--h4 graf-after--figure">2. Prepare Github repository</h4>
+<p id="ab36" class="graf graf--p graf-after--h4">We need to add a service to call the Jenkins Github webhook on a push, to do this go to settings -&gt; integrations &amp; Services and add a new service. The Jenkins Github plugin service should be in the list of available services.</p>
+<figure id="e6b1" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*8XxmrgIi2NwpX_XOqYIrrg.png" data-width="1586" data-height="702" data-action="zoom" data-action-value="1*8XxmrgIi2NwpX_XOqYIrrg.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="32"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*8XxmrgIi2NwpX_XOqYIrrg.png" data-src="https://cdn-images-1.medium.com/max/800/1*8XxmrgIi2NwpX_XOqYIrrg.png" /></div>
+</div>
+</figure>
+<p id="e75c" class="graf graf--p graf-after--figure">Enter the URL of your Jenkins instance followed by /github-webhook/</p>
+<figure id="d0e1" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*Wc4mA2Fnxqf3AMPNbPJiTw.png" data-width="1122" data-height="796" data-action="zoom" data-action-value="1*Wc4mA2Fnxqf3AMPNbPJiTw.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="52"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*Wc4mA2Fnxqf3AMPNbPJiTw.png" data-src="https://cdn-images-1.medium.com/max/800/1*Wc4mA2Fnxqf3AMPNbPJiTw.png" /></div>
+</div>
+</figure>
+<h4 id="c2c3" class="graf graf--h4 graf-after--figure">3. Giving the Jenkins user access to the Github repository</h4>
+<p id="32ca" class="graf graf--p graf-after--h4">We need to give the Jenkins user access to our repository by adding a deploy key in the Github settings.</p>
+<p id="e28b" class="graf graf--p graf-after--p">The first step is generating SSH keys for the Jenkins user if they do not already exist.</p>
+<pre id="65a2" class="graf graf--pre graf-after--p">jenkins@ip:/home/ubuntu$ ssh-keygen</pre>
+<p id="f624" class="graf graf--p graf-after--pre">Depending on where the key was created, you need to copy the public key so that it can be added to Github</p>
+<pre id="086f" class="graf graf--pre graf-after--p">jenkins@ip:/home/ubuntu$ cat /var/lib/jenkins/.ssh/id_rsa.pub</pre>
+<p id="0e3a" class="graf graf--p graf-after--pre">Add the key copied in the previous step to Github. To do this head to the repository settings -&gt; Deploy keys</p>
+<figure id="cb0e" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*aGZ23qCZ8G3egpqSk3v2XQ.png" data-width="1592" data-height="996" data-action="zoom" data-action-value="1*aGZ23qCZ8G3egpqSk3v2XQ.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="45"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*aGZ23qCZ8G3egpqSk3v2XQ.png" data-src="https://cdn-images-1.medium.com/max/800/1*aGZ23qCZ8G3egpqSk3v2XQ.png" /></div>
+</div>
+</figure>
+<p id="8228" class="graf graf--p graf-after--figure">The last step is to check that everything is working as expected, as the Jenkins user in your console enter the below to check the connection to Github.</p>
+<pre id="64e4" class="graf graf--pre graf-after--p">jenkins@ip:~/.ssh$ ssh git@github.com</pre>
+<p id="3ae5" class="graf graf--p graf-after--pre">If successful you should see the following message</p>
+<pre id="1381" class="graf graf--pre graf-after--p">Warning: Permanently added the RSA host key for IP address '{YOUR_SERVER_IP}' to the list of known hosts.</pre>
+<pre id="8cfa" class="graf graf--pre graf-after--pre">PTY allocation request failed on channel 0</pre>
+<pre id="f4ce" class="graf graf--pre graf-after--pre">Hi marcbest/medium-jenkins-git-tut! You've successfully authenticated, but GitHub does not provide shell access.</pre>
+<pre id="4a8d" class="graf graf--pre graf-after--pre">Connection to github.com closed.</pre>
+<h4 id="7111" class="graf graf--h4 graf-after--pre">4. Update Jenkins job with Github configuration</h4>
+<p id="6bb2" class="graf graf--p graf-after--h4">In the &lsquo;General&rsquo; section of the job configuration check the Github project tick box and enter the URL to the repository that you configured in step 2.</p>
+<figure id="206f" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*sJ2b-sf0kIauZmIapza3vg.png" data-width="1962" data-height="1090" data-action="zoom" data-action-value="1*sJ2b-sf0kIauZmIapza3vg.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="40"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*sJ2b-sf0kIauZmIapza3vg.png" data-src="https://cdn-images-1.medium.com/max/800/1*sJ2b-sf0kIauZmIapza3vg.png" /></div>
+</div>
+</figure>
+<p id="aca1" class="graf graf--p graf-after--figure">Next update the Source Code Management section, first set the repository URL (note the format git@github.com:{YOUR_REPO}. You can also specify the branch you would like to use.</p>
+<figure id="1f92" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*hvo9bsOnMaeIanE3LSjZPw.png" data-width="1874" data-height="846" data-action="zoom" data-action-value="1*hvo9bsOnMaeIanE3LSjZPw.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="32"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*hvo9bsOnMaeIanE3LSjZPw.png" data-src="https://cdn-images-1.medium.com/max/800/1*hvo9bsOnMaeIanE3LSjZPw.png" /></div>
+</div>
+</figure>
+<p id="3923" class="graf graf--p graf-after--figure">The last step is to tell Jenkins to build when the Github hook is called, select the highlighted option below in the Build Triggers section.</p>
+<figure id="bb6a" class="graf graf--figure graf-after--p">
+<div class="aspectRatioPlaceholder is-locked">
+<div class="aspectRatioPlaceholder-fill">&nbsp;</div>
+<div class="progressiveMedia js-progressiveMedia graf-image is-canvasLoaded is-imageLoaded" data-image-id="1*fh3zgPmLPoLRjcYaO0CdBw.png" data-width="1922" data-height="552" data-action="zoom" data-action-value="1*fh3zgPmLPoLRjcYaO0CdBw.png" data-scroll="native"><canvas class="progressiveMedia-canvas js-progressiveMedia-canvas" width="75" height="20"></canvas><img class="progressiveMedia-image js-progressiveMedia-image" src="https://cdn-images-1.medium.com/max/800/1*fh3zgPmLPoLRjcYaO0CdBw.png" data-src="https://cdn-images-1.medium.com/max/800/1*fh3zgPmLPoLRjcYaO0CdBw.png" /></div>
+</div>
+</figure>
+<p id="6621" class="graf graf--p graf-after--figure graf--trailing">That&rsquo;s it! Your Jenkins build should now be triggered whenever a push is made to your repository.</p>
