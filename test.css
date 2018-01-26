@@ -1,7 +1,4 @@
-form{
-	text-align: center;
-}
-
-#submit{
-	background-color: red;
+#exampleInputEmail1{
+	width: 200px;
+	height: 42px;
 }
