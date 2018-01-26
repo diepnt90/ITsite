@@ -5,8 +5,11 @@ td{
 }
 
 #one{
-	background-color: gray;
+	background-color: #BCE784;
 }
 #two{
-	background-color: red;
+	background-color: #FAFFD8;
+}
+#three{
+	background-color: #75B8C8;
 }
