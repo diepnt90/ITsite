@@ -1,15 +1,5 @@
-<<<<<<< HEAD
 td{
-=======
-#top{
-border: 10px solid blue;
-width: 100%;
-text-align: center;
-margin: auto; 
-}
->>>>>>> 715e15a59e1942acaa8df5f10740ca09e02e0595
-
 	background-color: black;
-	height: 20px;
-	width: 20px;
+	height: 30px;
+	width: 30px;
 }
