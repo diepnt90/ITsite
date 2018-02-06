@@ -4,53 +4,15 @@
 	<title></title>
 </head>
 <body>
-Công ty tui có 02 Window Server 2012 R2:
-
-Primary Domain Controller:  dc01.vnsysadmin.local
-Additional domain controller: dc02.vnsysadmin.local
-
-
-Một ngày đẹp trời, DC01 lăn đùng ra ngủm, chết không rõ nguyên nhân. Tất cả mọi hoạt động chứng thực Users, Join domain, Policy...đề không hoạt động.
-
-Giải quyết: 
- ==> cưỡng chế 05 FSMO từ DC01 qua DC02
-Kiểm tra trước khi cưỡng chế:
-
-Trên DC02
-C:\>netdom query fsmo
-Schema master               DC01.vnsysadmin.local
-Domain naming master        DC01.vnsysadmin.local
-PDC                         DC01.vnsysadmin.local
-RID pool manager            DC01.vnsysadmin.local
-Infrastructure master       DC01.vnsysadmin.local
-The command completed successfully.
-
-Thực hiện cưỡng chế:
-C:\>ntdsutil
-ntdsutil: roles
-fsmo maintenance: connections
-server connections: connect to server dc02.vnsysadmin.local
-Binding to dc02.vnsysadmin.local ...
-Connected to dc02.vnsysadmin.local using credentials of locally logged on user.
-server connections: quit
-fsmo maintenance: seize schema master
-fsmo maintenance: seize naming master    ----> Nếu là Windows 2000/2003: seize domain naming master
-fsmo maintenance: seize RID master
-fsmo maintenance: seize PDC
-fsmo maintenance: seize infrastructure master
-
-Kiểm tra sau khi cưỡng chế:
-
-C:\>netdom query fsmo
-Schema master               DC02.vnsysadmin.local
-Domain naming master        DC02.vnsysadmin.local
-PDC                         DC02.vnsysadmin.local
-RID pool manager            DC02.vnsysadmin.local
-Infrastructure master       DC02.vnsysadmin.local
-The command completed successfully.
-
-Xong! 05 FSMO roles đã được DC02 cưỡng đoạt thành công!
-
-Bước tiếp theo là xóa DC01 (đã chết) khỏi hệ thống sử dụng lệnh hoặc ntdsutil /metadata cleanup
+<p style="color: #5e9ca0;">C&ocirc;ng ty tui c&oacute; 02 Window Server 2012 R2:<br /><br /></p>
+<ul>
+<li>
+<p>Primary Domain Controller: &nbsp;dc01.vnsysadmin.local</p>
+</li>
+<li>
+<p>Additional domain controller: dc02.vnsysadmin.local</p>
+</li>
+</ul>
+<p style="color: #5e9ca0;"><br /><br />Một ng&agrave;y đẹp trời, DC01 lăn đ&ugrave;ng ra ngủm, chết kh&ocirc;ng r&otilde; nguy&ecirc;n nh&acirc;n. Tất cả mọi hoạt động chứng thực Users, Join domain, Policy...đề kh&ocirc;ng hoạt động.<br /><br /><strong><u>Giải quyết: </u></strong><br /><a name="more"></a>&nbsp;==&gt; <strong>cưỡng chế 05 FSMO từ DC01 qua DC02</strong><br /><strong>Kiểm tra <u>trước khi</u> cưỡng chế:</strong><br /><br />Tr&ecirc;n DC02<br />C:\&gt;netdom query fsmo<br />Schema master &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; DC01.vnsysadmin.local<br />Domain naming master &nbsp; &nbsp; &nbsp; &nbsp;DC01.vnsysadmin.local<br />PDC &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; DC01.vnsysadmin.local<br />RID pool manager &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DC01.vnsysadmin.local<br />Infrastructure master &nbsp; &nbsp; &nbsp; DC01.vnsysadmin.local<br />The command completed successfully.<br /><br /><strong>Thực hiện cưỡng chế:</strong><br />C:\&gt;ntdsutil<br />ntdsutil: roles<br />fsmo maintenance: connections<br />server connections: connect to server dc02.vnsysadmin.local<br />Binding to dc02.vnsysadmin.local ...<br />Connected to dc02.vnsysadmin.local using credentials of locally logged on user.<br />server connections: quit<br />fsmo maintenance: seize schema master<br />fsmo maintenance: seize naming master &nbsp; &nbsp;----&gt; Nếu l&agrave; Windows 2000/2003: seize domain naming master<br />fsmo maintenance: seize RID master<br />fsmo maintenance: seize PDC<br />fsmo maintenance: seize infrastructure master<br /><br /><strong>Kiểm tra <u>sau khi</u> cưỡng chế:</strong><br /><br />C:\&gt;netdom query fsmo<br />Schema master &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; DC02.vnsysadmin.local<br />Domain naming master &nbsp; &nbsp; &nbsp; &nbsp;DC02.vnsysadmin.local<br />PDC &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; DC02.vnsysadmin.local<br />RID pool manager &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DC02.vnsysadmin.local<br />Infrastructure master &nbsp; &nbsp; &nbsp; DC02.vnsysadmin.local<br />The command completed successfully.<br /><br />Xong! 05 FSMO roles đ&atilde; được DC02 cưỡng đoạt th&agrave;nh c&ocirc;ng!<br /><br />Bước tiếp theo l&agrave; x&oacute;a DC01 (đ&atilde; chết) khỏi hệ thống sử dụng lệnh hoặc ntdsutil /metadata cleanup </p>
 </body>
 </html>
