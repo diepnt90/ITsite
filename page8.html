@@ -1,0 +1,32 @@
+<h2>File Naming Format DBname_YYYYDDMM.BAK</h2>
+<div class="codediv">
+<pre class="prettyprint lang-sql prettyprinted"><span class="kwd">DECLARE</span><span class="pln"> @name </span><span class="typ">VARCHAR</span><span class="pun">(</span><span class="lit">50</span><span class="pun">)</span> <span class="com">-- database name  </span>
+<span class="kwd">DECLARE</span><span class="pln"> @path </span><span class="typ">VARCHAR</span><span class="pun">(</span><span class="lit">256</span><span class="pun">)</span> <span class="com">-- path for backup files  </span>
+<span class="kwd">DECLARE</span><span class="pln"> @fileName </span><span class="typ">VARCHAR</span><span class="pun">(</span><span class="lit">256</span><span class="pun">)</span> <span class="com">-- filename for backup  </span>
+<span class="kwd">DECLARE</span><span class="pln"> @fileDate </span><span class="typ">VARCHAR</span><span class="pun">(</span><span class="lit">20</span><span class="pun">)</span> <span class="com">-- used for file name</span>
+ 
+<span class="com">-- specify database backup directory</span>
+<span class="kwd">SET</span><span class="pln"> @path </span><span class="pun">=</span> <span class="str">'C:\Backup\'</span>  
+ 
+<span class="com">-- specify filename format</span>
+<span class="kwd">SELECT</span><span class="pln"> @fileDate </span><span class="pun">=</span> <span class="kwd2">CONVERT</span><span class="pun">(</span><span class="typ">VARCHAR</span><span class="pun">(</span><span class="lit">20</span><span class="pun">),</span><span class="kwd2">GETDATE</span><span class="pun">(),</span><span class="lit">112</span><span class="pun">)</span> 
+ 
+<span class="kwd">DECLARE</span><span class="pln"> db_cursor </span><span class="kwd">CURSOR</span><span class="pln"> READ_ONLY </span><span class="kwd">FOR</span>  
+<span class="kwd">SELECT</span><span class="pln"> name 
+</span><span class="kwd">FROM</span><span class="pln"> master</span><span class="pun">.</span><span class="pln">dbo</span><span class="pun">.</span><span class="pln">sysdatabases 
+</span><span class="kwd">WHERE</span><span class="pln"> name </span><span class="kwd3">NOT</span> <span class="kwd3">IN</span> <span class="pun">(</span><span class="str">'master'</span><span class="pun">,</span><span class="str">'model'</span><span class="pun">,</span><span class="str">'msdb'</span><span class="pun">,</span><span class="str">'tempdb'</span><span class="pun">)</span>  <span class="com">-- exclude these databases</span>
+ 
+<span class="kwd">OPEN</span><span class="pln"> db_cursor   
+</span><span class="kwd">FETCH</span><span class="pln"> NEXT </span><span class="kwd">FROM</span><span class="pln"> db_cursor </span><span class="kwd">INTO</span><span class="pln"> @name   
+ 
+</span><span class="kwd">WHILE</span> <span class="kwd2">@@FETCH_STATUS</span> <span class="pun">=</span> <span class="lit">0</span>   
+<span class="kwd">BEGIN</span>   
+   <span class="kwd">SET</span><span class="pln"> @fileName </span><span class="pun">=</span><span class="pln"> @path </span><span class="pun">+</span><span class="pln"> @name </span><span class="pun">+</span> <span class="str">'_'</span> <span class="pun">+</span><span class="pln"> @fileDate </span><span class="pun">+</span> <span class="str">'.BAK'</span>  
+   <span class="kwd">BACKUP</span> <span class="kwd">DATABASE</span><span class="pln"> @name </span><span class="kwd">TO</span> <span class="kwd">DISK</span> <span class="pun">=</span><span class="pln"> @fileName  
+ 
+   </span><span class="kwd">FETCH</span><span class="pln"> NEXT </span><span class="kwd">FROM</span><span class="pln"> db_cursor </span><span class="kwd">INTO</span><span class="pln"> @name   
+</span><span class="kwd">END</span>   
+<br /> 
+<span class="kwd">CLOSE</span><span class="pln"> db_cursor   
+</span><span class="kwd">DEALLOCATE</span><span class="pln"> db_cursor</span><br /><br />save as backup.sql<br /><br />create backup.bat with following content<br /><br />sqlcmd -U sa -P <a href="mailto:P@ssw0rd">P@ssw0rd</a>  -i &ldquo;C:\Backup\backup.sql&rdquo;<br /><br />and use task scheduler to run it everyday.</pre>
+</div>
