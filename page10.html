@@ -1,0 +1,18 @@
+<p>Most of the time I am using virtual machines for developing installation scripts and operating system images. With Microsoft App-V sequencer I am depending on using virtual machines, and snapshots to revert to the previous state after sequencing process&nbsp;is done. Many times these snapshots are older than 30 days and now and then I run into this small and annoying issues.</p>
+<div class="messageBox error icon">The trust relationship between this workstation and the primary domain failed.</div>
+<p><a class="cboxElement" href="http://www.networknet.nl/apps/wp/wp-content/uploads/2011/09/Windows-7-The-trust-relationship-between-this-workstation-and-the-primary-domain-failed.png"><img class="alignnone size-full wp-image-1947" title="Windows 7 The trust relationship between this workstation and the primary domain failed" src="http://www.networknet.nl/apps/wp/wp-content/uploads/2011/09/Windows-7-The-trust-relationship-between-this-workstation-and-the-primary-domain-failed.png" alt="" width="518" height="283" /></a></p>
+<p>If I encountered this then I had to go to &ldquo;Active Directory Users and Computers&rdquo; console, find the computer object, reset the computer account, log-in with local administrator account on the system, join to a workgroup, reboot, log-in again with administrator account and join the system back to the domain. All these steps could take up to 30 minutes depending on my other activities.</p>
+<p>Back in the old days I used the&nbsp;<strong>netdom.exe</strong>&nbsp;command and I remembered there was an option to reset the machine account password with the domain controller. On the web I did some research&nbsp;and found a working solution for me.</p>
+<p>Out of the box&nbsp;<strong>netdom.exe</strong>&nbsp;tool is not available on Windows 7 (I am using 32bit enterprise version). To get the command utility I had to install&nbsp;<strong>Remote Server Administration Tools&nbsp;</strong>(<a class="cboxElement" href="http://support.microsoft.com/kb/958830#iframe" target="_blank" rel="noopener">KB958830</a>) and copy that on a network share.</p>
+<p>I found out that the netdom.exe utility needs to stored in&nbsp;<em>C:\Windows\System32</em>&nbsp;and&nbsp;<strong>netdom.exe.mui</strong>&nbsp;file should be copied to&nbsp;<em>C:\Windows\System32\en-US</em>&nbsp;folder. If the netdom.exe location is wrong or the mui file is missing netdom.exe won&rsquo;t show anything when started.</p>
+<p>Download netdom.exe from&nbsp;<a href="http://www.networknet.nl/apps/wp/wp-content/uploads/2011/09/netdom_windows7.zip">here</a>. These two files have been exacted from KB958830.</p>
+<h3>&nbsp;</h3>
+<ul>
+<li>Make sure the netdom.exe and netdom.exe.mui files are stored in the&nbsp;mentioned folder locations</li>
+<li>Open an elevated command prompt</li>
+<li>Run: netdom.exe resetpwd /server:domaincontroller /userD:ivan&nbsp;/passwordD *</li>
+<li>Enter&nbsp;password</li>
+<li>Reboot the machine</li>
+</ul>
+<p><a class="cboxElement" href="http://www.networknet.nl/apps/wp/wp-content/uploads/2011/09/netdom.exe-resetpwd.png"><img class="alignnone size-full wp-image-1941" title="netdom.exe resetpwd" src="http://www.networknet.nl/apps/wp/wp-content/uploads/2011/09/netdom.exe-resetpwd.png" alt="" width="615" height="268" /></a></p>
+<h3>&nbsp;</h3>
